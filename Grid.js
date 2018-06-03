@@ -16,6 +16,10 @@ class Grid {
         Grid.grids = (Grid.grids || []).concat(this)
     }
 
+    size() {
+        return this.cols * this.rows
+    }
+
     coordToIdx(row, col) {
         return (row * this.cols + col)
     }

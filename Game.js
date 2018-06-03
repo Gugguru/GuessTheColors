@@ -53,6 +53,16 @@ class Game {
         }
     }
 
+    keyPressed(e) {
+        let num = parseInt(e.key);
+        // this.selectedColor = Math.min(num, this.colors.length) - 1
+        this.mainGrid.addColor(this.currentRow, num - 1, this.colorPickerGrid.cells[this.selectedColor])
+        if (this.mainGrid.rowIsFull(this.currentRow)) {
+            this.rowComplete()
+        }
+        this.getColorDir(e.key)
+    }
+
     gameOver() { return this.won || this.lost }
 
     restart() {
@@ -66,9 +76,11 @@ class Game {
         this.correctGrid.cells = this.solution
         this.colorPickerGrid.cells = this.colors;
     }
-    
+
     randomizeColors() {
-        this.colors = Array(this.colorPickerGrid.rows * this.colorPickerGrid.cols).fill(0).map(x => this.getRandomColor())
+        let hu = Math.round(Math.random() * 360)
+        this.colors = Array(this.colorPickerGrid.size()).fill(0).map((x, i) => "hsl(" + (hu + i * 360 / this.colorPickerGrid.size() + 1) + ",100%,50%)")
+        // this.colors = Array(this.colorPickerGrid.size()).fill(0).map(x => this.getRandomColor())
     }
 
     generateSolution() {
@@ -112,6 +124,32 @@ class Game {
         let [row, col] = this.colorPickerGrid.getCell(this.mouseX, this.mouseY);
         if (row >= 0 && col >= 0) {
             this.selectedColor = this.colorPickerGrid.coordToIdx(row, col);
+        }
+    }
+
+    getColorDir(dir) {
+        switch (dir) {
+            case "ArrowUp":
+                if (this.selectedColor - this.colorPickerGrid.cols >= 0) {
+                    this.selectedColor = this.selectedColor - this.colorPickerGrid.cols
+                }
+                break;
+            case "ArrowDown":
+                if (this.selectedColor + this.colorPickerGrid.cols < this.colors.length) {
+                    this.selectedColor = this.selectedColor + this.colorPickerGrid.cols
+                }
+                break;
+            case "ArrowLeft":
+                if (this.selectedColor - 1 >= 0) {
+                    this.selectedColor = this.selectedColor - 1
+                }
+                break;
+            case "ArrowRight":
+                if (this.selectedColor + 1 < this.colors.length) {
+                    this.selectedColor = this.selectedColor + 1
+                }
+                break;
+
         }
     }
 
