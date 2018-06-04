@@ -133,8 +133,8 @@ class Grid {
     }
 
     hide() {
-        this.ctx.clearRect(this.x - this.edgeWidth / 2, this.y - this.edgeWidth / 2,
-            this.cols * this.boxSize + this.edgeWidth, this.rows * this.boxSize + this.edgeWidth)
+        this.ctx.clearRect(this.x - this.edgeWidth, this.y - this.edgeWidth,
+            this.cols * this.boxSize + this.edgeWidth * 2, this.rows * this.boxSize + this.edgeWidth * 2)
     }
 
 

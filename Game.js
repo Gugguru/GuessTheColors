@@ -1,12 +1,12 @@
 class Game {
     constructor() {
-        this.canvas = document.createElement("canvas");
-        this.canvas.width = 1000;
-        this.canvas.height = 800;
+        this.canvas = document.getElementById("myCanvas");
+        this.canvas.width = window.innerWidth - 10;
+        this.canvas.height = window.innerHeight - 10;
         this.ctx = this.canvas.getContext("2d");
         this.ctx.lineWidth = 2;
         this.bgHue = 270;
-        this.mainGrid = new Grid(4, 8, 50, this.ctx, 300, 170);
+        this.mainGrid = new Grid(4, 8, 50, this.ctx, window.innerWidth / 3, window.innerHeight / 4);
         this.colorPickerGrid = new Grid(3, 2, 50, this.ctx, this.mainGrid.rightEdge() + 100, this.mainGrid.bottomEdge() - 2 * 50);
         this.randomizeColors()
         // this.colors = ["#604541", "#c76c21", "#835e52", "#9c6c35", "#59f0bb", "#956222"];
@@ -54,13 +54,16 @@ class Game {
     }
 
     keyPressed(e) {
-        let num = parseInt(e.key);
-        // this.selectedColor = Math.min(num, this.colors.length) - 1
-        this.mainGrid.addColor(this.currentRow, num - 1, this.colorPickerGrid.cells[this.selectedColor])
-        if (this.mainGrid.rowIsFull(this.currentRow)) {
-            this.rowComplete()
+        if (!this.gameOver()) {
+            let num = parseInt(e.key);
+            // this.selectedColor = Math.min(num, this.colors.length) - 1
+            this.mainGrid.addColor(this.currentRow, num - 1, this.colorPickerGrid.cells[this.selectedColor])
+            if (this.mainGrid.rowIsFull(this.currentRow)) {
+                this.rowComplete()
+            }
+            this.getColorDir(e.key)
         }
-        this.getColorDir(e.key)
+        if (e.key == "r") { this.restart() }
     }
 
     gameOver() { return this.won || this.lost }
@@ -75,6 +78,7 @@ class Game {
         this.solution = this.generateSolution();
         this.correctGrid.cells = this.solution
         this.colorPickerGrid.cells = this.colors;
+        this.selectedColor = 0;
     }
 
     randomizeColors() {
