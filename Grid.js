@@ -110,6 +110,11 @@ class Grid {
         this.addColor(x, y, this.noColor)
     }
 
+    contains(x, y) {
+        return ((x > this.x) && (x < this.rightEdge()) && 
+                (y > this.y) && (y < this.bottomEdge()))
+    }
+
     rightEdge() {
         return this.x + this.cols * this.boxSize 
     }
