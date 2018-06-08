@@ -22,7 +22,7 @@ class Game {
         this.gameGrids = Grid.grids.slice()
 
         this.screen = "menu"
-        this.playButton = new Grid(4, 1, 50, this.ctx, this.centralize(50, 50)[0], this.centralize(50, 50, )[1])
+        this.playButton = new Grid(4, 1, 50, this.ctx, this.centralize(50, 50)[0] - 4 * 50 / 2, this.centralize(50, 50, )[1])
 
 
         this.mouseX = -1;
@@ -64,8 +64,9 @@ class Game {
     keyPressed(e) {
         if (!this.gameOver()) {
             let num = parseInt(e.key);
-            // this.selectedColor = Math.min(num, this.colors.length) - 1
-            this.mainGrid.addColor(this.currentRow, num - 1, this.colorPickerGrid.cells[this.selectedColor])
+            if ((num <= this.mainGrid.cols) && num > 0) {
+                this.mainGrid.addColor(this.currentRow, num - 1, this.colorPickerGrid.cells[this.selectedColor])
+            }
             if (this.mainGrid.rowIsFull(this.currentRow)) {
                 this.rowComplete()
             }
@@ -185,7 +186,7 @@ class Game {
     }
 
     centralize(w, h) {
-        return [this.canvas.width / 2 - w / 2, this.canvas.height / 2 - h / 2];
+        return [(this.canvas.width / 2) - (w / 2), (this.canvas.height / 2) - (h / 2)];
     }
 
     drawResults() {
@@ -206,7 +207,7 @@ class Game {
             this.ctx.fillText("Hooray! You won! Click to restart!", this.correctGrid.x, this.correctGrid.y - gap)
 
         } else if (this.lost) {
-            
+
             // let [x, y] = this.mainGrid.getCellCenter(0, this.mainGrid.cols / 2)
             this.ctx.fillText("Too bad! You lost! Click to restart!", this.correctGrid.x, this.correctGrid.y - gap - 20)
             this.ctx.fillText("Correct solution was:", this.correctGrid.x, this.correctGrid.y - gap)
